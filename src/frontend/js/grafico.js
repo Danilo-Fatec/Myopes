@@ -1,25 +1,47 @@
 let graficoPizza;
 
-function renderizaGraficoPizza() {
+async function fetchDadosGrafico() {
+  try {
+    const response = await fetch('http://localhost:3000/focos-por-estado-bioma-pizza');
+    if (!response.ok) throw new Error('Erro ao buscar dados do backend');
+    const data = await response.json();
+    console.log('Dados recebidos do backend:', data); // Debug
+    return data;
+  } catch (error) {
+    console.error('Erro ao buscar dados do gráfico:', error);
+    return [];
+  }
+}
+
+async function renderizaGraficoPizza() {
   const ctx = document.getElementById('graficoPizza');
   if (!ctx || graficoPizza) return; // Evita múltiplos renders
+
+  const dados = await fetchDadosGrafico();
+  if (!dados || dados.length === 0) {
+    console.error('Nenhum dado disponível para o gráfico.');
+    return;
+  }
+  const labels = dados.map(item => item.label);
+  const valores = dados.map(item => item.value);
+
+  console.log('Labels:', labels);
+  console.log('Valores:', valores);
 
   graficoPizza = new Chart(ctx, {
     type: 'pie',
     data: {
-      labels: ['Focos de Calor', 'Risco de Fogo', 'Áreas Queimadas'],
+      labels: labels,
       datasets: [{
-        label: 'Distribuição Média',
-        data: [45, 25, 30], // Exemplo fixo
+        label: 'Distribuição por Estado e Bioma',
+        data: valores,
         backgroundColor: [
-          'rgb(255, 0, 0)',
-          'rgb(255, 139, 86)',
-          'rgb(235, 160, 54)'
-        ],
-        borderColor: [
-         'rgb(255, 0, 0)',
-          'rgb(255, 139, 86)',
-          'rgb(235, 160, 54)'
+          'rgb(255, 99, 132)',
+          'rgb(54, 162, 235)',
+          'rgb(255, 206, 86)',
+          'rgb(75, 192, 192)',
+          'rgb(153, 102, 255)',
+          'rgb(255, 159, 64)'
         ],
         borderWidth: 1
       }]
