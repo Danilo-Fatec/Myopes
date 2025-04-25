@@ -5,7 +5,7 @@ async function fetchDadosGrafico() {
     const response = await fetch('http://localhost:3000/focos-por-estado-bioma-pizza');
     if (!response.ok) throw new Error('Erro ao buscar dados do backend');
     const data = await response.json();
-    console.log('Dados recebidos do backend:', data); // Debug
+/*     console.log('Dados recebidos do backend:', data); */
     return data;
   } catch (error) {
     console.error('Erro ao buscar dados do gráfico:', error);
@@ -28,12 +28,15 @@ async function renderizaGraficoPizza() {
   console.log('Labels:', labels);
   console.log('Valores:', valores);
 
+  console.log(labels.length)
+  console.log(valores.length)
+
   graficoPizza = new Chart(ctx, {
-    type: 'pie',
+    type: 'bar',
     data: {
       labels: labels,
       datasets: [{
-        label: 'Distribuição por Estado e Bioma',
+        label: 'Riscos de Fogo',
         data: valores,
         backgroundColor: [
           'rgb(255, 99, 132)',
@@ -51,6 +54,11 @@ async function renderizaGraficoPizza() {
       plugins: {
         legend: {
           position: 'bottom'
+        }
+      },
+      scales: {
+        y: {
+          beginAtZero: true
         }
       }
     }

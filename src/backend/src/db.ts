@@ -4,8 +4,8 @@ const pool = new Pool({
   user: 'postgres',       
   host: 'localhost',        
   database: 'focos',   
-  password: "admin",   
-  port: 5432,               
+  password: "123",   
+  port: 5433,               
 });
 
 export default pool;

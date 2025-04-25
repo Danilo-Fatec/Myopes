@@ -18,11 +18,12 @@ async function getFocosPorEstadoBiomaParaPizza(): Promise<any[]> {
     console.log("Função getFocosPorEstadoBiomaParaPizza() foi chamada.");
     try {
         const result = await pool.query(`
-            SELECT estado, bioma, COUNT(*) AS total_focos
-            FROM "dados_satelite"
-            GROUP BY estado, bioma
-            ORDER BY total_focos DESC
-        `);
+        SELECT estado, bioma, COUNT(*) AS total_focos
+        FROM "dados_satelite"
+        GROUP BY estado, bioma
+        ORDER BY total_focos DESC
+        LIMIT 10
+    `);
         console.log("Resultado da consulta (estado/bioma):", result);
         console.log("Dados brutos (estado/bioma):", result.rows);
         const formattedData = result.rows.map(row => ({
@@ -45,6 +46,7 @@ async function getFocosPorRiscoEstadoParaPizza(): Promise<any> {
             FROM "dados_satelite"
             GROUP BY estado, risco_fogo
             ORDER BY estado, total_focos DESC
+            LIMIT 10
         `);
         console.log("Resultado da consulta (risco/estado):", result);
         console.log("Dados brutos (risco/estado):", result.rows);
